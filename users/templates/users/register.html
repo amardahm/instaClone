@@ -1,0 +1,41 @@
+{% extends "users/base.html" %}
+{% load staticfiles %}
+{% load crispy_forms_tags %}
+{% block title %} register {% endblock title%}
+
+{% block content %}
+    <div style="margin-top: 20px;"></div>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-6 col-md-5 authentification">
+                <div class="form-header">
+                    <h1>
+                        Instagram
+                    </h1>
+                    <p>
+                        Sign up to see photoes and videos from your friends
+                    </p>
+                </div>
+                <div class="form-body">
+                    <form method="POST">
+
+                        <fieldset class="form-group">
+                            {% csrf_token %}
+                            {{form | crispy }}
+                        </fieldset>
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-primary form-control">Register</button>
+
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div style="margin: 20px 0;"></div>
+        <div class="row">
+            <div class="col-sm-6 col-md-5 authentification">
+                <p style="text-align: center;">Have an account? <a href="{% url 'login' %}">Login</a></p>
+            </div>
+        </div>
+    </div>
+{% endblock content %}
