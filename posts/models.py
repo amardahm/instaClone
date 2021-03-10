@@ -11,18 +11,18 @@ class Post(models.Model):
     def __str__(self):
         return self.caption
 
-class PostImage(models.Model):
+class postImage(models.Model):
     post = models.ForeignKey(Post,on_delete=models.CASCADE)
-    image = models.ImageField(upload_to="posts_images")
+    image = models.ImageField()
 
-class Comments(models.Model):
+class comments(models.Model):
     post = models.ForeignKey(Post,on_delete=models.CASCADE,related_name="comments")
     content = models.CharField(max_length=100,blank=False)
     author = models.ForeignKey(User,on_delete=models.CASCADE)
     data_created = models.DateTimeField(default=timezone.now())
 
 
-class Like(models.Model):
+class like(models.Model):
     liker = models.ForeignKey(User,on_delete=models.CASCADE)
     post = models.ForeignKey(Post,on_delete=models.CASCADE)
     date_created = models.DateTimeField(default=timezone.now())
