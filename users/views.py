@@ -3,8 +3,9 @@ from django.contrib.auth.models import User
 from .forms import UserRegisterForm
 from django.contrib import messages
 # Create your views here.
+from django.views.decorators.csrf import csrf_protect
 
-
+@csrf_protect
 def registerUserView(request):
     """ this is for registring a new user"""
     if request.method == "POST":

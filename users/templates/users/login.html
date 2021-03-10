@@ -14,8 +14,9 @@
                 </div>
                 <div class="form-body">
                     <form method="POST">
-                        {% csrf_token %}
+
                         <fieldset class="form-group">
+                            {% csrf_token %}
                             {{form | crispy}}
                         </fieldset>
                         <div class="form-group">
