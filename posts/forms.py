@@ -1,15 +1,11 @@
 from django import forms
-from .models import Post,Comments,PostImage
+from .models import Post,Comments
 
 class CreatePostForm(forms.ModelForm):
     class Meta:
         model = Post
-        fields = ['caption']
+        fields = ['caption','image']
 
-class CreatePostImageForm(forms.ModelForm):
-    class Meta:
-        model = PostImage
-        fields = ['image']
 
 class CommentForm(forms.ModelForm):
     class Meta:
