@@ -27,18 +27,27 @@ def Publish(request):
     })
 
 @login_required
-def Update(request,pk):
+def UpdatePost(request,pk):
+    """vanilla view to update a post"""
     post = get_object_or_404(Post,pk=pk)
     if request.method == "POST":
-        form = UpdatePostForm(request.POST,instance=post)
-        image = form.cleaned_data("image")
-        post.image = image
+        form = UpdatePostForm(request.POST,request.FILES,instance=post)
         if form.is_valid():
             form.save()
             return redirect('home')
     else:
         form = UpdatePostForm()
     return render(request,"posts/update.html",{"form":form})
+
+def DeletePost(request,pk):
+    post = get_object_or_404(Post,pk=pk)
+    if request.method == "POST":
+        post.delete()
+        return redirect("home")
+
+    return render(request,"posts/delete.html")
+
+
 
 """class Publish(CreateView): # new
     model = Post
@@ -52,6 +61,7 @@ def home(request):
     return render(request,"posts/home.html",{"posts":posts})
 
 class PostDetail(DetailView):
+    """class based view to display post details"""
     model = Post
     template_name = "posts/detail.html"
     context_object_name = "post"
