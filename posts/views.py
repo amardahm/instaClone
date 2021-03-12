@@ -1,10 +1,13 @@
-from django.shortcuts import render,redirect
+from django.shortcuts import render,redirect,get_object_or_404
 from django.contrib.auth.decorators import login_required
 from .forms import CreatePostForm
 from django.views.generic.list import ListView
 from .models import Post,Comments,Like
 from django.urls import reverse_lazy
-from django.views.generic import ListView, CreateView
+from django.views.generic.edit import CreateView, DeleteView, UpdateView
+from django.views.generic.detail import DetailView
+from django.contrib.auth.mixins import LoginRequiredMixin
+from .forms import CreatePostForm,UpdatePostForm
 # Create your views here.
 
 
@@ -23,6 +26,20 @@ def Publish(request):
         "form":form,
     })
 
+@login_required
+def Update(request,pk):
+    post = get_object_or_404(Post,pk=pk)
+    if request.method == "POST":
+        form = UpdatePostForm(request.POST,instance=post)
+        image = form.cleaned_data("image")
+        post.image = image
+        if form.is_valid():
+            form.save()
+            return redirect('home')
+    else:
+        form = UpdatePostForm()
+    return render(request,"posts/update.html",{"form":form})
+
 """class Publish(CreateView): # new
     model = Post
     form_class = CreatePostForm
@@ -30,4 +47,11 @@ def Publish(request):
     success_url = reverse_lazy('home')
 """
 def home(request):
-    return render(request,"posts/home.html")
+    """ display posts on the home page """
+    posts = Post.objects.all()
+    return render(request,"posts/home.html",{"posts":posts})
+
+class PostDetail(DetailView):
+    model = Post
+    template_name = "posts/detail.html"
+    context_object_name = "post"
