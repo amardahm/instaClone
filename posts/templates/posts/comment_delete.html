@@ -1,0 +1,14 @@
+{% extends "users/base.html" %}
+
+{% block title %}delete comment{% endblock title %}
+
+{% block content %}
+    <div class="container">
+        <h1> do you really want to delete the commet</h1>
+
+        <form method="POST">
+            {% csrf_token %}
+            <button class="btn btn-danger" type="submit">Delete</button>
+        </form>
+    </div>
+{% endblock content %}

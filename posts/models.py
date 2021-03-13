@@ -12,7 +12,7 @@ class Post(models.Model):
         return self.caption
 
 
-class Comments(models.Model):
+class Comment(models.Model):
     post = models.ForeignKey(Post,on_delete=models.CASCADE,related_name="comments")
     content = models.CharField(max_length=100,blank=False)
     author = models.ForeignKey(User,on_delete=models.CASCADE)

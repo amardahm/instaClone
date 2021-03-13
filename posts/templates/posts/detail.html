@@ -43,7 +43,12 @@
         </div>
         <div class="card-footer">
           <div class="card-footer">
+
           {% for comment in post.comments.all %}
+            {% if request.user == comment.author%}
+              <a href="{% url 'update-comment' post.id comment.id %}">Update</a>
+              <a href="{% url 'delete-comment' post.id comment.id %}">Delete</a>
+            {% endif %}
             <h3>{{ comment.author }}</h3>
             <p>{{ comment.content }}</p>
           {% endfor %}
