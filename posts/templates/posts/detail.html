@@ -43,16 +43,10 @@
         </div>
         <div class="card-footer">
           <div class="card-footer">
-            <form method="POST">
-              <div class="row">
-                <div class="col">
-                  <input type="text" class="form-control" placeholder="Add a comment">
-                </div>
-                <div class="col-auto">
-                  <button type="submit" class="btn btn-primary">submit</button>
-                </div>
-              </div>
-            </form>
+          {% for comment in post.comments.all %}
+            <h3>{{ comment.author }}</h3>
+            <p>{{ comment.content }}</p>
+          {% endfor %}
           </div>
         </div>
       </div>

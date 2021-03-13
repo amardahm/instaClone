@@ -1,0 +1,29 @@
+{% extends "users/base.html" %}
+{% load crispy_forms_tags %}
+{% block title %}Comment{% endblock title%}
+
+{% block content %}
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-6 col-md-5 authentification">
+                <div class="form-header">
+                    <h1>
+                        comment
+                    </h1>
+                </div>
+                <div class="form-body">
+                    <form method="POST" enctype="multipart/form-data">
+
+                        <fieldset class="form-group">
+                            {% csrf_token %}
+                            {{ form|crispy }}
+                        </fieldset>
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-primary form-control">comment</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock content %}

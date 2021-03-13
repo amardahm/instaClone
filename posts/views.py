@@ -1,13 +1,10 @@
-from django.shortcuts import render,redirect,get_object_or_404
+from django.shortcuts import render,redirect,get_object_or_404,HttpResponse
 from django.contrib.auth.decorators import login_required
-from .forms import CreatePostForm
-from django.views.generic.list import ListView
 from .models import Post,Comments,Like
-from django.urls import reverse_lazy
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
 from django.views.generic.detail import DetailView
 from django.contrib.auth.mixins import LoginRequiredMixin
-from .forms import CreatePostForm,UpdatePostForm
+from .forms import CreatePostForm,UpdatePostForm,CommentForm
 # Create your views here.
 
 
@@ -32,9 +29,12 @@ def UpdatePost(request,pk):
     post = get_object_or_404(Post,pk=pk)
     if request.method == "POST":
         form = UpdatePostForm(request.POST,request.FILES,instance=post)
-        if form.is_valid():
-            form.save()
-            return redirect('home')
+        if request.user == post.publisher:
+            if form.is_valid():
+                form.save()
+                return redirect('home')
+        else:
+            return HttpResponse("<h1> you are not allowed to make this setting </h1>")
     else:
         form = UpdatePostForm()
     return render(request,"posts/update.html",{"form":form})
@@ -42,10 +42,26 @@ def UpdatePost(request,pk):
 def DeletePost(request,pk):
     post = get_object_or_404(Post,pk=pk)
     if request.method == "POST":
-        post.delete()
-        return redirect("home")
-
+        if request.user == post.publisher:
+            post.delete()
+            return redirect("home")
+        else:
+            return HttpResponse("<h1> you are not allowed to go to this page</h1>")
     return render(request,"posts/delete.html")
+
+@login_required
+def CreateComment(request,pk):
+    post = get_object_or_404(Post,pk=pk)
+    if request.method == "POST":
+        form = CommentForm(request.POST or None)
+        if form.is_valid():
+            content = request.POST.get('content')
+            comment = Comments(post=post,content=content,author=request.user)
+            comment.save()
+            return redirect('home')
+    else:
+        form = CommentForm()
+    return render(request,"posts/comment.html",{"form":form})
 
 
 
@@ -65,3 +81,8 @@ class PostDetail(DetailView):
     model = Post
     template_name = "posts/detail.html"
     context_object_name = "post"
+
+
+
+
+
